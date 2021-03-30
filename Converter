@@ -1,0 +1,424 @@
+package com.example.converter;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText etx_Input;
+    TextView txt_Output;
+    public void openDialog(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Notice!")
+                    .setMessage("       Select Unit")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+                        }
+
+                    });
+                alert.create().show();
+            }
+
+
+     private  boolean validate(){
+
+        String validateInput = etx_Input.getText().toString().trim();
+
+        if (validateInput.isEmpty()){
+            etx_Input.setError("Fields can't empty");
+            txt_Output.setText("");
+            return  false;
+        }
+        else {
+
+            etx_Input.setError(null);
+            return  true;
+        }
+    }
+
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        List<String> Inputs = Arrays.asList("- - Select - -","Tonnes","Pound","Kilogram","Gram","Milligram","Centigram");
+        List<String> Inputs2 = Arrays.asList("- - Select - -","Tonnes","Pound","Kilogram","Gram","Milligram","Centigram");
+
+        Spinner spn_Input = findViewById(R.id.spn_First);
+        Spinner spn_Output = findViewById((R.id.spn_Second));
+         etx_Input = findViewById(R.id.edt_Input);
+         txt_Output = findViewById(R.id.txt_Output);
+        Button btn_Convert = findViewById(R.id.btn_Convert);
+
+
+
+        ArrayAdapter adapter1 = new ArrayAdapter(getApplicationContext(),  android.R.layout.simple_spinner_item,Inputs);
+        adapter1.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        spn_Input.setAdapter(adapter1);
+
+        ArrayAdapter adapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item,Inputs2);
+        adapter2.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        spn_Output.setAdapter(adapter2);
+
+
+        btn_Convert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if(!validate()){
+                    return;
+                }
+
+
+                String source = spn_Input.getSelectedItem().toString();
+                String Final = spn_Output.getSelectedItem().toString();
+
+                String FValue;
+                Double num_Input = Double.parseDouble(etx_Input.getText().toString());
+
+                switch (source){
+                    case "- - Select - -":{
+                        openDialog();
+                        spn_Input.requestFocus();
+                        txt_Output.setText("");
+                           break;
+                    }
+                    case "Tonnes": {
+
+                        if (Final.equalsIgnoreCase("Tonnes")){
+                               num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if (Final.equalsIgnoreCase("Pound")){
+                                num_Input = 2000*num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+
+                        }
+                        else if (Final.equalsIgnoreCase("Kilogram")){
+                            num_Input = 907.185 * num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if (Final.equalsIgnoreCase("Gram")){
+                            num_Input = 907185 * num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("Milligram")){
+                            num_Input = 1000000000 * num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                       else if(Final.equalsIgnoreCase("Centigram")){
+                            num_Input = 100000000 * num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+                            break;
+                    }
+                    case "Pound": {
+
+                        if (Final.equalsIgnoreCase("Pound")){
+                            num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Kilogram"))){
+
+                            num_Input = num_Input * 0.453592;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText((FValue) + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Gram"))){
+
+                            num_Input = num_Input * 453.592;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Milligram"))){
+
+                            num_Input = num_Input * 453592;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Centigram"))){
+
+                            num_Input = num_Input * 45359.2;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Tonnes"))){
+
+                            num_Input = num_Input * 0.0005;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+                                break;
+
+
+                    }
+                    case "Kilogram": {
+
+                        if (Final.equalsIgnoreCase("Pound")){
+                            num_Input = num_Input * 2.20462;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Kilogram"))){
+
+                            num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Gram"))){
+
+                            num_Input = num_Input * 1000;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Milligram"))){
+
+                            num_Input = num_Input * 1000000;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Centigram"))){
+
+                            num_Input = num_Input * 100000;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue+ "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Tonnes"))){
+
+                            num_Input = num_Input * 0.00110231;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+
+                        break;
+                    }
+                    case "Gram": {
+
+                        if (Final.equalsIgnoreCase("Pound")){
+                            num_Input = num_Input * 0.00220462;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Kilogram"))){
+
+                            num_Input = num_Input *0.001;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Gram"))){
+
+                            num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Milligram"))){
+
+                            num_Input = num_Input * 1000;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Centigram"))){
+
+                            num_Input = num_Input * 100;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Tonnes"))){
+
+                            num_Input = num_Input * 1.10231e-6;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+                            break;
+
+                    }
+                    case "Milligram": {
+
+                        if (Final.equalsIgnoreCase("Pound")){
+                            num_Input = num_Input * 2.20462e-6;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Kilogram"))){
+
+                            num_Input = num_Input *1e-6;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Gram"))){
+
+                            num_Input = num_Input * 0.001;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Milligram"))){
+
+                            num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Centigram"))){
+
+                            num_Input = num_Input * 0.1;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Tonnes"))){
+
+                            num_Input = num_Input * 1e-9;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+                        break;
+
+                    }
+                    case "Centigram": {
+                        if (Final.equalsIgnoreCase("Pound")){
+                            num_Input = num_Input * 2.20462e-5;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   lbs");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Kilogram"))){
+
+                            num_Input = num_Input * 1e-5;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   kg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Gram"))){
+
+                            num_Input = num_Input * 0.01;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  g");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Milligram"))){
+
+                            num_Input = num_Input * 10;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  mg");
+                            txt_Output.setText("");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Centigram"))){
+
+                            num_Input = num_Input;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "   cg");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase(("Tonnes"))){
+
+                            num_Input = num_Input * 1e-8;
+                            FValue = String.valueOf(num_Input);
+                            txt_Output.setText(FValue + "  t");
+                            Toast.makeText(MainActivity.this, "Successfully Converted", Toast.LENGTH_LONG).show();
+                        }
+                        else if(Final.equalsIgnoreCase("- - Select - -")){
+                            openDialog();
+                            spn_Output.requestFocus();
+                            txt_Output.setText("");
+                        }
+                            break;
+
+                    }
+
+
+
+                }
+
+                etx_Input.clearFocus();
+
+            }
+        });
+    }
+}
