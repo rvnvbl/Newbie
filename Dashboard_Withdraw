@@ -1,0 +1,106 @@
+package com.example.activity2;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+public class Dashboard_Withdraw extends AppCompatActivity {
+    SharedPreferences sharedPreferences;
+    private  static  final String SHARED_PREF_NAME = "mypref";
+    private  static  final String KEY_NAME ="s_name";
+    private  static  final String KEY_ACCOUNT ="s_account";
+    private  static  final String KEY_USER ="s_username";
+    private  static  final String KEY_PASSWORD ="s_password";
+    private static String KEY_BALANCE = "s_balance";
+    private static String KEY_BALANCE_S = "s_balance_s ";
+    Button btn_agree_withdraw, btn_cancel_withdraw;
+    TextView txt_availbal_withdraw , txt_amount_withdraw, txt_account_number_withdraw;
+    TextInputEditText txt_password_withdraw;
+    String fpassword;
+    Integer famount;
+    Integer balance_withdraw;
+    String pass_withdraw;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard__withdraw);
+
+        txt_availbal_withdraw = findViewById(R.id.testing_balance_withdraw);
+        txt_amount_withdraw = findViewById(R.id.txt_amount_withdraw);
+        txt_account_number_withdraw = findViewById(R.id.txt_account_number_withdraw);
+        txt_password_withdraw = (TextInputEditText)findViewById(R.id.txt_password_withdraw);
+        btn_agree_withdraw = findViewById(R.id.btn_agree_withdraw);
+        btn_cancel_withdraw = findViewById(R.id.btn_cancel_withdraw);
+
+        // Shared Preference
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
+       String account_withdraw= sharedPreferences.getString(KEY_ACCOUNT, null);
+        balance_withdraw = sharedPreferences.getInt(KEY_BALANCE , 0);
+         pass_withdraw = sharedPreferences.getString(KEY_PASSWORD, null);
+
+       txt_account_number_withdraw.setText(account_withdraw);
+       txt_availbal_withdraw.setText(String.valueOf(balance_withdraw+".00"));
+
+
+                btn_agree_withdraw.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cashout();
+                    }
+                });
+
+                btn_cancel_withdraw.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Dashboard_Withdraw.this, Dashboard.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+    }
+
+    public void cashout(){
+        famount = Integer.parseInt(txt_amount_withdraw.getText().toString());
+        fpassword = txt_password_withdraw.getEditableText().toString();
+
+        if(famount <= balance_withdraw) {
+
+                if (famount <= balance_withdraw && fpassword.equals(pass_withdraw)) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(KEY_BALANCE, balance_withdraw - famount  );
+                editor.apply();
+                Toast.makeText(this, "Withdraw Successfully", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(Dashboard_Withdraw.this, Dashboard.class);
+                startActivity(intent);
+                finish();
+
+
+            }
+                else if(!fpassword.equals(pass_withdraw)){
+                    Toast.makeText(this, "Password Invalid", Toast.LENGTH_SHORT).show();
+                    txt_password_withdraw.requestFocus();
+
+            }
+                else if (famount<=0){
+                    Toast.makeText(this,"Invalid Amount", Toast.LENGTH_SHORT).show();
+                    txt_amount_withdraw.requestFocus();
+            }
+        }
+        else{
+
+
+            Toast.makeText(this, "Balance is not Enough" , Toast.LENGTH_SHORT).show();
+        }
+
+    }
+}
